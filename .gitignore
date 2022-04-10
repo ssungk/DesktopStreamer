@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# Build
+x86
+x64
+
+# Binary
+*.bgr
+*.rgb
+*.yuv
+*.nv12
+*.h264
+*.size
+
+# Temp
+.vs
