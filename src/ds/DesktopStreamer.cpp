@@ -13,9 +13,17 @@ DesktopStreamer::~DesktopStreamer()
 
 }
 
-void DesktopStreamer::Run()
+void DesktopStreamer::Run(bool internal_thread)
 {
-  io_.run();
+  if (internal_thread)
+  {
+    std::thread thread(&DesktopStreamer::run, shared_from_this());
+    thread_ = std::move(thread);
+  }
+  else
+  {
+    run();
+  }
 }
 
 void DesktopStreamer::Stop()
@@ -26,12 +34,18 @@ void DesktopStreamer::Stop()
   boost::asio::post(io_, f);
 
   promise.get_future().get();
+
+  thread_.joinable() ? thread_.join() : void();
+}
+
+void DesktopStreamer::run()
+{
+  io_.run();
 }
 
 void DesktopStreamer::stop(std::promise<bool>* promise)
 {
   work_.reset();
-
   promise->set_value(true);
 }
 
