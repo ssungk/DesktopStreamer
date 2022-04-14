@@ -44,4 +44,6 @@ x64
 *.size
 
 # Temp
-.vs
+*.vs
+*.sock
+*.bak

@@ -18,11 +18,16 @@ private:
   void stop(std::promise<bool>* promise);
 
 private:
+  void doAccept();
+  void onAccept(const boost::system::error_code& ec, boost::asio::local::stream_protocol::socket socket);
+
+private:
   std::thread thread_;
   boost::asio::io_context io_;
   boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
 
 private:
+  std::shared_ptr<boost::asio::local::stream_protocol::acceptor> acceptor_;
 
 };
 
