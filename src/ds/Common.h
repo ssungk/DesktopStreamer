@@ -1,25 +1,20 @@
 ﻿#ifndef _DS_COMMON_H_
 #define _DS_COMMON_H_
 
-#include <spdlog/spdlog.h>
+#include "ds/Logger.h"
 
+// Windows Header
+#include <UserEnv.h>
+#include <WtsApi32.h>
+
+// Boost Header
 #include <boost/dll.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/process/environment.hpp>
 #include <boost/asio.hpp>
+#include <boost/bind/bind.hpp>
 
-#include <UserEnv.h>
-#include <WtsApi32.h>
-
+// C/C++ Header
 #include <future>
-
-
-// SPDLOG style log redefine
-#define DSLOG_TRACE(...)         SPDLOG_TRACE(__VA_ARGS__)
-#define DSLOG_DEBUG(...)         SPDLOG_DEBUG(__VA_ARGS__)
-#define DSLOG_INFO(...)          SPDLOG_INFO(__VA_ARGS__)
-#define DSLOG_WARN(...)          SPDLOG_WARN(__VA_ARGS__)
-#define DSLOG_ERROR(...)         SPDLOG_ERROR(__VA_ARGS__)
-#define DSLOG_CRITICAL(...)      SPDLOG_CRITICAL(__VA_ARGS__)
 
 #endif

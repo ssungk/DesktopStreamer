@@ -10,7 +10,7 @@ class DesktopStreamer : public std::enable_shared_from_this<DesktopStreamer>
 public:
   DesktopStreamer();
   virtual ~DesktopStreamer();
-  void Run(bool internal_thread = true);
+  void Run(bool service_mode = true);
   void Stop();
 
 private:
@@ -20,14 +20,18 @@ private:
 private:
   void doAccept();
   void onAccept(const boost::system::error_code& ec, boost::asio::local::stream_protocol::socket socket);
+  void executeUserSessionProcess();
+  void userSessionProcessKilled(const boost::system::error_code& ec);
 
 private:
   std::thread thread_;
   boost::asio::io_context io_;
   boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
+  bool service_mode_;
 
 private:
   std::shared_ptr<boost::asio::local::stream_protocol::acceptor> acceptor_;
+  boost::asio::windows::object_handle process_;
 
 };
 

@@ -14,6 +14,8 @@ int WinService::ServiceRun()
   auto env = boost::this_process::environment();
   auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";
 
+  Logger::Init("logger", log_path, 1024 * 1024 * 5, 5);
+
   SERVICE_TABLE_ENTRY ste[] = { { WinService::service_name_, WinService::ServiceMain }, { NULL, NULL} };
 
   auto ret = StartServiceCtrlDispatcher(ste);
@@ -23,7 +25,7 @@ int WinService::ServiceRun()
     if (ec == ERROR_FAILED_SERVICE_CONTROLLER_CONNECT)
     {
       // 콘솔로 실행(서비스로 실행되지 않았음)
-      DSLOG_INFO("=========== Desktop Streamer start in console mode ===========");
+      DSLOG_INFO("========== Desktop Streamer start in console mode ==========");
       auto ret = SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE);
       if (!ret)
       {
@@ -43,7 +45,7 @@ int WinService::ServiceRun()
 
 void WinService::ServiceMain(DWORD argc, LPWSTR* argv)
 {
-  DSLOG_INFO("Desktop Streamer Service Started");
+  DSLOG_INFO("========== Desktop Streamer start in service mode ==========");
   ssh_ = RegisterServiceCtrlHandlerEx(service_name_, WinService::ServiceHandler, NULL);
 
   if (!ssh_)
