@@ -6,11 +6,11 @@ namespace fs = boost::filesystem;
 namespace ds {
 
 DesktopStreamer::DesktopStreamer() :
-  work_(boost::asio::make_work_guard(io_)),
-  process_(io_)
+  strand_(Loop::Io().get_executor()),
+  process_(strand_)
 {
   std::remove("server.sock");
-  acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(io_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
+  acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
 }
 
 DesktopStreamer::~DesktopStreamer()
@@ -21,15 +21,11 @@ DesktopStreamer::~DesktopStreamer()
 void DesktopStreamer::Run(bool service_mode)
 {
   service_mode_ = service_mode;
-  if (service_mode_)
-  {
-    std::thread thread(&DesktopStreamer::run, shared_from_this());
-    thread_ = std::move(thread);
-  }
-  else
-  {
-    run();
-  }
+
+  auto f = boost::bind(&DesktopStreamer::run, shared_from_this());
+  boost::asio::post(strand_, f);
+
+  Loop::Run();
 }
 
 void DesktopStreamer::Stop()
@@ -37,11 +33,13 @@ void DesktopStreamer::Stop()
   std::promise<bool> promise;
 
   auto f = std::bind(&DesktopStreamer::stop, shared_from_this(), &promise);
-  boost::asio::post(io_, f);
+  boost::asio::post(strand_, f);
 
   promise.get_future().get();
 
-  thread_.joinable() ? thread_.join() : void();
+  Loop::Stop();
+
+  //thread_.joinable() ? thread_.join() : void();
 }
 
 void DesktopStreamer::run()
@@ -51,16 +49,15 @@ void DesktopStreamer::run()
 
   doAccept();
 
-  executeUserSessionProcess();
+  excuteScreenCapturer();
 
-  io_.run();
+  //io_.run();
 }
 
 void DesktopStreamer::stop(std::promise<bool>* promise)
 {
   acceptor_->close();
   process_.close();
-  work_.reset();
   promise->set_value(true);
 }
 
@@ -88,6 +85,18 @@ void DesktopStreamer::onAccept(const boost::system::error_code& ec, boost::asio:
   //sockets_.emplace(sock->Id(), sock);
 
   doAccept();
+}
+
+void DesktopStreamer::excuteScreenCapturer()
+{
+  if (service_mode_)
+  {
+    executeUserSessionProcess();
+  }
+  else
+  {
+    executeUserSessionProcess2();
+  }
 }
 
 void DesktopStreamer::executeUserSessionProcess()
@@ -144,7 +153,7 @@ void DesktopStreamer::executeUserSessionProcess()
   wchar_t path[MAX_PATH];
   GetModuleFileName(NULL, path, MAX_PATH);
   fs::path service_path(path);
-  fs::path tx_path = service_path.parent_path().append(L"\\test.exe");
+  fs::path tx_path = service_path.parent_path().append(L"\\ScreenCapturer.exe");
   if (!fs::is_regular_file(tx_path))
   {
     DSLOG_CRITICAL("RDS Tx file is not exists : {}", tx_path.string());
@@ -161,7 +170,54 @@ void DesktopStreamer::executeUserSessionProcess()
 
   CloseHandle(pi.hThread);
 
-  process_ = std::move(boost::asio::windows::object_handle(io_, pi.hProcess));
+  process_ = std::move(boost::asio::windows::object_handle(strand_, pi.hProcess));
+
+  auto f = boost::bind(&DesktopStreamer::userSessionProcessKilled, shared_from_this(), ph::error);
+  process_.async_wait(f);
+}
+
+void DesktopStreamer::executeUserSessionProcess2()
+{
+  DSLOG_INFO("RdsWinTxServiceEventLoop::executeUserSessionProcess");
+
+  HANDLE process = GetCurrentProcess();
+
+  PROCESS_INFORMATION pi;
+  STARTUPINFO si = { sizeof(STARTUPINFO) };
+  wchar_t dekstop[] = L"winsta0\\default";
+  //wchar_t dekstop[] = L"winsta0\\Winlogon";
+  si.lpReserved = NULL;
+  si.lpTitle = NULL;
+  si.lpDesktop = dekstop;
+  si.dwX = si.dwY = si.dwXSize = si.dwYSize = 0L;
+  si.dwFlags = 0;
+  si.wShowWindow = SW_SHOW;
+  si.lpReserved2 = NULL;
+  si.cbReserved2 = 0;
+
+  wchar_t path[MAX_PATH];
+  GetModuleFileName(NULL, path, MAX_PATH);
+  fs::path service_path(path);
+  fs::path tx_path = service_path.parent_path().append(L"\\ScreenCapturer.exe");
+  if (!fs::is_regular_file(tx_path))
+  {
+    DSLOG_CRITICAL("RDS Tx file is not exists : {}", tx_path.string());
+    std::terminate();
+  }
+
+  DSLOG_INFO("path : {}", tx_path.string());
+
+  auto ret = CreateProcess(tx_path.c_str(), NULL, NULL, NULL, FALSE, CREATE_UNICODE_ENVIRONMENT | HIGH_PRIORITY_CLASS, NULL, NULL, &si, &pi);
+  if (!ret)
+  {
+    auto ec = GetLastError();
+    DSLOG_CRITICAL("CreateProcessAsUser failed. ec : 0x{:X}", ec);
+    std::terminate();
+  }
+
+  CloseHandle(pi.hThread);
+
+  process_ = std::move(boost::asio::windows::object_handle(strand_, pi.hProcess));
 
   auto f = boost::bind(&DesktopStreamer::userSessionProcessKilled, shared_from_this(), ph::error);
   process_.async_wait(f);
@@ -178,7 +234,7 @@ void DesktopStreamer::userSessionProcessKilled(const boost::system::error_code& 
   DSLOG_INFO("RdsWinTxServiceEventLoop::processKilled");
 
   process_.close();
-  executeUserSessionProcess();
+  excuteScreenCapturer();
 }
 
 }  // namespace ds

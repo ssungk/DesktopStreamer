@@ -20,16 +20,22 @@ private:
 private:
   void doAccept();
   void onAccept(const boost::system::error_code& ec, boost::asio::local::stream_protocol::socket socket);
+  void excuteScreenCapturer();
   void executeUserSessionProcess();
+  void executeUserSessionProcess2();
   void userSessionProcessKilled(const boost::system::error_code& ec);
 
 private:
-  std::thread thread_;
-  boost::asio::io_context io_;
-  boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
+  //std::thread thread_;
+  //boost::asio::io_context io_;
+  //boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
   bool service_mode_;
 
 private:
+  //boost::asio::io_context::strand strand_;
+  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+
+
   std::shared_ptr<boost::asio::local::stream_protocol::acceptor> acceptor_;
   boost::asio::windows::object_handle process_;
 

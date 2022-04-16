@@ -7,7 +7,7 @@ namespace ds {
 
 wchar_t WinService::service_name_[30] = SERVICE_NAME;
 SERVICE_STATUS_HANDLE WinService::ssh_ = { 0 };
-std::shared_ptr<ds::DesktopStreamer> WinService::ds_ = std::make_shared<DesktopStreamer>();
+std::shared_ptr<ds::DesktopStreamer> WinService::ds_;// = std::make_shared<DesktopStreamer>();
 
 int WinService::ServiceRun()
 {
@@ -32,6 +32,7 @@ int WinService::ServiceRun()
         DSLOG_WARN("SetConsoleCtrlHandler failed");
       }
 
+      ds_ = std::make_shared<DesktopStreamer>();
       ds_->Run(false);
 
       return 0;
@@ -55,10 +56,10 @@ void WinService::ServiceMain(DWORD argc, LPWSTR* argv)
   }
 
   SetServiceState(SERVICE_START_PENDING);
-
-  ds_->Run();
-
   SetServiceState(SERVICE_RUNNING);
+
+  ds_ = std::make_shared<DesktopStreamer>();
+  ds_->Run();
 }
 
 DWORD WinService::ServiceHandler(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext)

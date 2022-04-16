@@ -18,17 +18,11 @@
     <ClCompile Include="..\..\src\sc\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\sc\Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\sc\ScreenCapturer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\sc\Socket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

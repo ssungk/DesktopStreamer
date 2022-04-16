@@ -1,7 +1,9 @@
 ﻿#ifndef _DS_COMMON_H_
 #define _DS_COMMON_H_
 
-#include "Core/Logger.h"
+// Desktop Streamer Core
+#include <Core/Common.h>
+#include <Core/Core.h>
 
 // Windows Header
 #include <UserEnv.h>

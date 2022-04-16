@@ -1,12 +1,7 @@
-﻿#ifndef _DS_SC_COMMON_H_
-#define _DS_SC_COMMON_H_
+﻿#ifndef _DS_CORE_COMMON_H_
+#define _DS_CORE_COMMON_H_
 
-// Desktop Streamer Core
-#include <Core/Common.h>
-
-// Windows Header
-#include <UserEnv.h>
-#include <WtsApi32.h>
+#include "Core/Logger.h"
 
 // Boost Header
 #include <boost/dll.hpp>

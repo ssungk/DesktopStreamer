@@ -1,8 +1,8 @@
-﻿#include <iostream>
+﻿#include "sc/ScreenCapturer.h"
 
 int main(int argc, char* argv[])
 {
-  printf("헬로 월드\n");
-
+  auto sc = std::make_shared<ds::ScreenCapturer>();
+  sc->Run();
   return 0;
 }

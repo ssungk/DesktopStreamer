@@ -1,5 +1,5 @@
-﻿#ifndef _DS_LOGGER_H_
-#define _DS_LOGGER_H_
+﻿#ifndef _DS_CORE_LOGGER_H_
+#define _DS_CORE_LOGGER_H_
 
 #ifdef _DEBUG
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_DEBUG
@@ -8,7 +8,11 @@
 #endif
 
 #include <spdlog/spdlog.h>
-
+#include <spdlog/sinks/sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/fmt/bundled/printf.h>
+#include <spdlog/fmt/ostr.h>
 
 namespace ds {
 
