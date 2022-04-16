@@ -142,10 +142,10 @@ void DesktopStreamer::executeUserSessionProcess()
   wchar_t path[MAX_PATH];
   GetModuleFileName(NULL, path, MAX_PATH);
   fs::path service_path(path);
-  fs::path tx_path = service_path.parent_path().append(L"\\rds_win_tx.exe");
+  fs::path tx_path = service_path.parent_path().append(L"\\test.exe");
   if (!fs::is_regular_file(tx_path))
   {
-    DSLOG_CRITICAL("RDS Tx file is not exists");
+    DSLOG_CRITICAL("RDS Tx file is not exists : {}", tx_path.string());
     std::terminate();
   }
 
