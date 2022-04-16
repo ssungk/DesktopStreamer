@@ -58,6 +58,8 @@ void DesktopStreamer::run()
 
 void DesktopStreamer::stop(std::promise<bool>* promise)
 {
+  acceptor_->close();
+  process_.close();
   work_.reset();
   promise->set_value(true);
 }
