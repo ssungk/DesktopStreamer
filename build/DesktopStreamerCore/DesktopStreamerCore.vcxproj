@@ -95,7 +95,6 @@
     <ClCompile Include="..\..\src\Core\Socket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Core\Common.h" />
     <ClInclude Include="..\..\src\Core\Core.h" />
     <ClInclude Include="..\..\src\Core\Logger.h" />
     <ClInclude Include="..\..\src\Core\Loop.h" />

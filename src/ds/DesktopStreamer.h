@@ -19,7 +19,7 @@ private:
 
 private:
   void doAccept();
-  void onAccept(const boost::system::error_code& ec, boost::asio::local::stream_protocol::socket socket);
+  void onAccept(std::shared_ptr<Socket> socket, const boost::system::error_code& ec);
   void excuteScreenCapturer();
   void executeUserSessionProcess();
   void executeUserSessionProcess2();
@@ -32,12 +32,10 @@ private:
   bool service_mode_;
 
 private:
-  //boost::asio::io_context::strand strand_;
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
-
-
-  std::shared_ptr<boost::asio::local::stream_protocol::acceptor> acceptor_;
+  boost::asio::local::stream_protocol::acceptor acceptor_;
   boost::asio::windows::object_handle process_;
+  std::shared_ptr<Socket> socket_;
 
 };
 

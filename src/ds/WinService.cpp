@@ -7,10 +7,12 @@ namespace ds {
 
 wchar_t WinService::service_name_[30] = SERVICE_NAME;
 SERVICE_STATUS_HANDLE WinService::ssh_ = { 0 };
-std::shared_ptr<ds::DesktopStreamer> WinService::ds_;// = std::make_shared<DesktopStreamer>();
+std::shared_ptr<ds::DesktopStreamer> WinService::ds_;
 
 int WinService::ServiceRun()
 {
+  std::remove("server.sock");
+
   auto env = boost::this_process::environment();
   auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";
 

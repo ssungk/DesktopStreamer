@@ -2,7 +2,7 @@
 #define _DS_SC_COMMON_H_
 
 // Desktop Streamer Core
-#include <Core/Common.h>
+#include <Core/Core.h>
 
 // Windows Header
 #include <UserEnv.h>

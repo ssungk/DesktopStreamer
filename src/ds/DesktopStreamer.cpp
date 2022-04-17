@@ -6,11 +6,13 @@ namespace fs = boost::filesystem;
 namespace ds {
 
 DesktopStreamer::DesktopStreamer() :
-  strand_(Loop::Io().get_executor()),
+  strand_(boost::asio::make_strand(Loop::Io())),
+  acceptor_(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false),
+  //strand_(Loop::Io().get_executor()),
   process_(strand_)
 {
   std::remove("server.sock");
-  acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
+  //acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
 }
 
 DesktopStreamer::~DesktopStreamer()
@@ -38,8 +40,6 @@ void DesktopStreamer::Stop()
   promise.get_future().get();
 
   Loop::Stop();
-
-  //thread_.joinable() ? thread_.join() : void();
 }
 
 void DesktopStreamer::run()
@@ -50,39 +50,33 @@ void DesktopStreamer::run()
   doAccept();
 
   excuteScreenCapturer();
-
-  //io_.run();
 }
 
 void DesktopStreamer::stop(std::promise<bool>* promise)
 {
-  acceptor_->close();
+  acceptor_.close();
   process_.close();
   promise->set_value(true);
 }
 
 void DesktopStreamer::doAccept()
 {
-  // Boost asio c++11 스타일로 사용하기 위해std::bind, std::placeholders를 사용함
-  // 다른데와 일관된 스타일을 위해 lambda 사용 안함, 좋은 방법이 있다면 수정할 생각
-  auto f = std::bind(&DesktopStreamer::onAccept, shared_from_this(), std::placeholders::_1, std::placeholders::_2);
-  acceptor_->async_accept(f);
+  auto socket = std::make_shared<Socket>();
+
+  auto f = boost::bind(&DesktopStreamer::onAccept, shared_from_this(), socket, ph::error);
+  acceptor_.async_accept(socket->Sock(), f);
 }
 
-void DesktopStreamer::onAccept(const boost::system::error_code& ec, boost::asio::local::stream_protocol::socket socket)
+void DesktopStreamer::onAccept(std::shared_ptr<Socket> socket, const boost::system::error_code& ec)
 {
   if (ec)
   {
-    DSLOG_ERROR("RTSP Accept error. ec : {}", ec.message());
+    DSLOG_ERROR("onAccept error. ec : {}", ec.message());
     return;
   }
 
-  DSLOG_ERROR("R------------------TSP Accept error. ec : {}", ec.message());
-
-  //auto sock = std::make_shared<rtsp::Socket>(shared_from_this(), std::move(socket));
-  //sock->Run();
-
-  //sockets_.emplace(sock->Id(), sock);
+  socket_ = socket;
+  socket_->Run();
 
   doAccept();
 }
@@ -178,7 +172,7 @@ void DesktopStreamer::executeUserSessionProcess()
 
 void DesktopStreamer::executeUserSessionProcess2()
 {
-  DSLOG_INFO("RdsWinTxServiceEventLoop::executeUserSessionProcess");
+  DSLOG_INFO("RdsWinTxServiceEventLoop::executeUserSessionProcess2");
 
   HANDLE process = GetCurrentProcess();
 

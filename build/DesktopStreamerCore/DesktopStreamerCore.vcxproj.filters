@@ -32,9 +32,6 @@
     <ClInclude Include="..\..\src\Core\Socket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Core\Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Core\Loop.h">
       <Filter>Header Files</Filter>
     </ClInclude>

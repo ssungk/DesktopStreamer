@@ -1,38 +1,72 @@
 ﻿#include "Core/Socket.h"
 
 namespace ph = boost::asio::placeholders;
-namespace fs = boost::filesystem;
 
 namespace ds {
 
-Scoket::Scoket(boost::asio::local::stream_protocol::socket&& socket) :
-  socket_(std::move(socket)),
-  strand_(boost::asio::make_strand(socket_.get_executor()))
+Socket::Socket() :
+  strand_(boost::asio::make_strand(Loop::Io())),
+  socket_(strand_)
 {
 
 }
 
-Scoket::~Scoket()
+Socket::~Socket()
 {
 
 }
 
-void Scoket::Run()
+void Socket::Run()
+{
+  auto f = boost::bind(&Socket::run, shared_from_this());
+  boost::asio::post(strand_, f);
+}
+
+void Socket::Stop()
+{
+  auto f = boost::bind(&Socket::stop, shared_from_this());
+  boost::asio::post(strand_, f);
+}
+
+void Socket::SendPacket()
 {
 
 }
 
-void Scoket::Stop()
+boost::asio::local::stream_protocol::socket& Socket::Sock()
+{
+  return socket_;
+}
+
+void Socket::run()
+{
+  doRead();
+}
+
+void Socket::stop()
 {
 
 }
 
-void Scoket::run()
+void Socket::doRead()
 {
-  //io_.run();
+  auto f = bind(&Socket::onReadHeader, shared_from_this(), ph::error, ph::bytes_transferred);
+  boost::asio::async_read(socket_, boost::asio::dynamic_buffer(buffer_, sizeof(uint8_t)), f);
 }
 
-void Scoket::stop()
+void Socket::onReadHeader(const boost::system::error_code& ec, size_t bytes_transferred)
+{
+  if (ec)
+  {
+    DSLOG_DEBUG("onReadHeader error. ec : {}", ec.message());
+    stop();
+    return;
+  }
+
+  doRead();
+}
+
+void Socket::onReadBody(const boost::system::error_code& ec, size_t bytes_transferred)
 {
 
 }

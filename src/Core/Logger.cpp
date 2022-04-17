@@ -11,7 +11,7 @@ bool Logger::Init(std::string logger_name, std::string file_name, size_t max_fil
     std::vector<spdlog::sink_ptr> sinks;
 
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-    console_sink->set_pattern("[%H:%M:%S][%5t][%^%-5!l%$] %-60v [%s:%#]");
+    console_sink->set_pattern("[%H:%M:%S][%5P][%5t][%^%-5!l%$] %-60v [%s:%#]");
 
     console_sink->set_level(spdlog::level::trace);
     sinks.push_back(console_sink);
