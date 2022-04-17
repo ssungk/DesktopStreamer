@@ -9,8 +9,8 @@ Desktop Streamer is a server that streams the screen of the desktop in RTSP, HLS
 - 화질평가(PSNR, SSIM, VMAF) (화질평가 기술이 적용할만한데가 있을지 고민중)
 
 ## 앞으로 해야할일
-- 윈도우 서비스로 동작하도록 작성(진행중...)
-- UDS(Unix Domain Socket)을 통한 통신구조 작성
+- 윈도우 서비스로 동작하도록 작성(완료)
+- UDS(Unix Domain Socket)을 통한 통신구조 작성(진행중, 서버측 초안 구현 완료, 클라이언트측 구현 예정)
 - 데스크탑 캡처 구현(desktop duplication api)
 - 쉐이더로 bgr to yuv 구현
 - HW인코더 구현
