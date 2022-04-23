@@ -1,8 +1,10 @@
-﻿#include "sc/ScreenCapturer.h"
+﻿//#include <atlstr.h>
+//#include <Commctrl.h>
+//#include <shellapi.h>
+//#include <atlbase.h>
+#include "sc/ScreenCapturerApp.h"
 
-int main(int argc, char* argv[])
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
-  auto sc = std::make_shared<ds::ScreenCapturer>();
-  sc->Run();
-  return 0;
+  return std::make_shared<ds::ScreenCapturerApp>()->Run();
 }

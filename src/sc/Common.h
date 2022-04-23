@@ -5,8 +5,8 @@
 #include <Core/Core.h>
 
 // Windows Header
-#include <UserEnv.h>
-#include <WtsApi32.h>
+#include <Windows.h>
+#include <atlstr.h>
 
 // Boost Header
 #include <boost/dll.hpp>
@@ -17,5 +17,6 @@
 
 // C/C++ Header
 #include <future>
+#include <thread>
 
 #endif

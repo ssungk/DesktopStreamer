@@ -17,11 +17,8 @@ private:
   void run();
   void stop();
 
-private: 
-  boost::asio::io_context io_;
-  boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
-
 private:
+  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
 
 };
 
