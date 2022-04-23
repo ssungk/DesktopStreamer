@@ -42,6 +42,16 @@ void DesktopStreamer::Stop()
   Loop::Stop();
 }
 
+void DesktopStreamer::OnSocketClosed()
+{
+
+}
+
+void DesktopStreamer::OnPacket()
+{
+
+}
+
 void DesktopStreamer::run()
 {
   auto env = boost::this_process::environment();
@@ -61,7 +71,7 @@ void DesktopStreamer::stop(std::promise<bool>* promise)
 
 void DesktopStreamer::doAccept()
 {
-  auto socket = std::make_shared<Socket>();
+  auto socket = std::make_shared<Socket>(shared_from_this());
 
   auto f = boost::bind(&DesktopStreamer::onAccept, shared_from_this(), socket, ph::error);
   acceptor_.async_accept(socket->Sock(), f);

@@ -8,7 +8,7 @@ namespace ds {
 class Socket : public std::enable_shared_from_this<Socket>
 {
 public:
-  Socket();
+  Socket(std::shared_ptr<SocketEvent> event);
   virtual ~Socket();
   void Run();
   void Stop();
@@ -25,6 +25,7 @@ private:
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
   boost::asio::local::stream_protocol::socket socket_;
+  std::shared_ptr<SocketEvent> event_;
 
 
   std::vector<uint8_t> buffer_;

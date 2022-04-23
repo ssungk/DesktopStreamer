@@ -4,9 +4,10 @@ namespace ph = boost::asio::placeholders;
 
 namespace ds {
 
-Socket::Socket() :
+Socket::Socket(std::shared_ptr<SocketEvent> event) :
   strand_(boost::asio::make_strand(Loop::Io())),
-  socket_(strand_)
+  socket_(strand_),
+  event_(event)
 {
 
 }
@@ -45,7 +46,7 @@ void Socket::run()
 
 void Socket::stop()
 {
-
+  socket_.close();
 }
 
 void Socket::doRead()

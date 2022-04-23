@@ -5,13 +5,19 @@
 
 namespace ds {
 
-class DesktopStreamer : public std::enable_shared_from_this<DesktopStreamer>
+class DesktopStreamer : public std::enable_shared_from_this<DesktopStreamer>,
+                        public SocketEvent
 {
 public:
   DesktopStreamer();
   virtual ~DesktopStreamer();
   void Run(bool service_mode = true);
   void Stop();
+
+private:
+  // SocketEvent
+  virtual void OnSocketClosed();
+  virtual void OnPacket();
 
 private:
   void run();

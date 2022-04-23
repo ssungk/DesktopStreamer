@@ -3,6 +3,7 @@
 
 // Desktop Streamer Core Logger Header
 #include <Core/Logger.h>
+#include <Core/SocketEvent.h>
 
 // Boost Header
 #include <boost/dll.hpp>

@@ -99,6 +99,7 @@
     <ClInclude Include="..\..\src\Core\Logger.h" />
     <ClInclude Include="..\..\src\Core\Loop.h" />
     <ClInclude Include="..\..\src\Core\Socket.h" />
+    <ClInclude Include="..\..\src\Core\SocketEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
