@@ -18,6 +18,7 @@ ScreenCapturerApp::~ScreenCapturerApp()
 
 int ScreenCapturerApp::Run()
 {
+  Loop::Run();
   run();
   return 0;
 }

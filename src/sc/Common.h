@@ -7,6 +7,8 @@
 // Windows Header
 #include <Windows.h>
 #include <atlstr.h>
+#include <d3d11.h>
+#include <dxgi1_2.h>
 
 // Boost Header
 #include <boost/dll.hpp>
@@ -18,5 +20,14 @@
 // C/C++ Header
 #include <future>
 #include <thread>
+
+
+
+
+
+
+
+//#include <atlbase.h>
+//#include <d3d11.h>
 
 #endif

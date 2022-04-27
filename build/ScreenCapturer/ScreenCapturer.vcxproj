@@ -149,12 +149,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\sc\DesktopDuplication.cpp" />
     <ClCompile Include="..\..\src\sc\Main.cpp" />
     <ClCompile Include="..\..\src\sc\ScreenCapturer.cpp" />
     <ClCompile Include="..\..\src\sc\ScreenCapturerApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sc\Common.h" />
+    <ClInclude Include="..\..\src\sc\DesktopDuplication.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturerApp.h" />
   </ItemGroup>
