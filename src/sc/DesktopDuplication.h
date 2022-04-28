@@ -3,13 +3,18 @@
 
 #include "sc/Common.h"
 
-class DesktopDuplication
+namespace ds {
+
+class DesktopDuplication : public std::enable_shared_from_this<DesktopDuplication>
 {
 public:
   DesktopDuplication();
   virtual ~DesktopDuplication();
-  int ScreenNumber();
-  void Capture(int index);
+  void Run();
+  void Stop();
+
+private:
+  void capture();
 
 private:
   void init();
@@ -17,9 +22,14 @@ private:
 private:
   CComPtr<ID3D11Device> device_;
   CComPtr<ID3D11DeviceContext> context_;
-  std::vector<CComPtr<IDXGIOutputDuplication>> dups_;
-  std::vector<CComPtr<ID3D11Texture2D>> textures_;
-  std::vector<FILE*> fs_;
+  CComPtr<IDXGIOutputDuplication> dup_;
+
+private:
+  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+
+  //std::vector<CComPtr<IDXGIOutputDuplication>> dups_;
 
 };
+
+} // namespace ds
 #endif

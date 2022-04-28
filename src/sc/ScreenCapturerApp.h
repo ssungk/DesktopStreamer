@@ -25,5 +25,5 @@ private:
 
 };
 
-}  // namespace ds
+} // namespace ds
 #endif
