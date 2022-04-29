@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\src\sc\Common.h" />
     <ClInclude Include="..\..\src\sc\DesktopDuplication.h" />
+    <ClInclude Include="..\..\src\sc\DesktopDuplicationEvent.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturerApp.h" />
   </ItemGroup>

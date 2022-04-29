@@ -36,6 +36,11 @@ void ScreenCapturer::OnPacket()
 
 }
 
+void ScreenCapturer::OnPacket(uint8_t num, std::vector<uint8_t> pkt)
+{
+
+}
+
 void ScreenCapturer::run()
 {
   auto socket = std::make_shared<Socket>(shared_from_this());

@@ -2,11 +2,13 @@
 #define _DS_SC_SCREEN_CAPTURER_H_
 
 #include "sc/Common.h"
+#include "sc/DesktopDuplicationEvent.h"
 
 namespace ds {
 
 class ScreenCapturer : public std::enable_shared_from_this<ScreenCapturer>,
-                       public SocketEvent
+                       public SocketEvent,
+                       public DesktopDuplicationEvent
 {
 public:
   ScreenCapturer();
@@ -18,6 +20,9 @@ private:
   // SocketEvent
   virtual void OnSocketClosed();
   virtual void OnPacket();
+
+  // DesktopDuplicationEvent
+  virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt);
 
 private:
   void run();
