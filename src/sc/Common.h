@@ -22,6 +22,8 @@
 #include <thread>
 
 
+#include "sc/DesktopDuplicationEvent.h"
+
 
 
 

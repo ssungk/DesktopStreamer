@@ -8,7 +8,7 @@ namespace ds {
 class DesktopDuplication : public std::enable_shared_from_this<DesktopDuplication>
 {
 public:
-  DesktopDuplication();
+  DesktopDuplication(std::shared_ptr<DesktopDuplicationEvent> event);
   virtual ~DesktopDuplication();
   void Run();
   void Stop();
@@ -18,6 +18,8 @@ private:
 
 private:
   void init();
+  void run();
+  void stop();
 
 private:
   CComPtr<ID3D11Device> device_;
@@ -27,6 +29,9 @@ private:
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
 
+
+  std::shared_ptr<DesktopDuplicationEvent> event_;
+  
   //std::vector<CComPtr<IDXGIOutputDuplication>> dups_;
 
 };

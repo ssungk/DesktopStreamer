@@ -4,8 +4,9 @@
 
 namespace ds {
 
-DesktopDuplication::DesktopDuplication() :
-  strand_(boost::asio::make_strand(Loop::Io()))
+DesktopDuplication::DesktopDuplication(std::shared_ptr<DesktopDuplicationEvent> event) :
+  strand_(boost::asio::make_strand(Loop::Io())),
+  event_(event)
 {
   init();
 }
@@ -17,13 +18,14 @@ DesktopDuplication::~DesktopDuplication()
 
 void DesktopDuplication::Run()
 {
-  auto f = boost::bind(&DesktopDuplication::capture, shared_from_this());
+  auto f = boost::bind(&DesktopDuplication::run, shared_from_this());
   boost::asio::post(strand_, f);
 }
 
 void DesktopDuplication::Stop()
 {
-
+  auto f = boost::bind(&DesktopDuplication::stop, shared_from_this());
+  boost::asio::post(strand_, f);
 }
 
 void DesktopDuplication::init()
@@ -116,6 +118,15 @@ void DesktopDuplication::init()
   }
 }
 
+void DesktopDuplication::run()
+{
+
+}
+
+void DesktopDuplication::stop()
+{
+  event_ ? event_.reset() : void();
+}
 
 void DesktopDuplication::capture()
 {
