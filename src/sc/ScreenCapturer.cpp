@@ -47,7 +47,13 @@ void ScreenCapturer::run()
   //auto f = boost::bind(&ScreenCapturer::connectHandler, shared_from_this(), ph::error);
   //boost::asio::async_connect(strand_, socket.Sock(),)
 
-  //socket->Sock().
+  boost::asio::local::stream_protocol::endpoint ep("server.sock");
+  boost::system::error_code ec;
+  socket->Sock().connect(ep, ec);
+  if (ec)
+  {
+    DSLOG_CRITICAL("uds 연결 실패");
+  }
 
 }
 
