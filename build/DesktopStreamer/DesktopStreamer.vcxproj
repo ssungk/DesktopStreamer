@@ -12,12 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\ds\DesktopStreamer.cpp" />
+    <ClCompile Include="..\..\src\ds\DesktopStreamerApp.cpp" />
     <ClCompile Include="..\..\src\ds\Main.cpp" />
     <ClCompile Include="..\..\src\ds\WinService.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ds\DesktopStreamer.h" />
     <ClInclude Include="..\..\src\ds\Common.h" />
+    <ClInclude Include="..\..\src\ds\DesktopStreamerApp.h" />
     <ClInclude Include="..\..\src\ds\WinService.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

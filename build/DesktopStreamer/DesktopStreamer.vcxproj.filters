@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\src\ds\DesktopStreamer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ds\DesktopStreamerApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\ds\WinService.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ds\DesktopStreamer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ds\DesktopStreamerApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
