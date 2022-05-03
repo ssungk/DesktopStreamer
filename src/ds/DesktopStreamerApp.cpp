@@ -5,13 +5,12 @@ namespace fs = boost::filesystem;
 
 namespace ds {
 
-DesktopStreamerApp::DesktopStreamerApp() :
-  strand_(boost::asio::make_strand(Loop::Io())),
-  //strand_(Loop::Io().get_executor()),
-  process_(strand_)
+DesktopStreamerApp::DesktopStreamerApp(EXECUTE_MODE mode) :
+  work_(boost::asio::make_work_guard(io_)),
+  process_(io_),
+  mode_(mode)
 {
-  //std::remove("server.sock");
-  //acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
+
 }
 
 DesktopStreamerApp::~DesktopStreamerApp()
@@ -19,67 +18,44 @@ DesktopStreamerApp::~DesktopStreamerApp()
 
 }
 
-void DesktopStreamerApp::Run(bool service_mode)
+void DesktopStreamerApp::Run()
 {
-  service_mode_ = service_mode;
-
-  auto f = boost::bind(&DesktopStreamerApp::run, shared_from_this());
-  boost::asio::post(strand_, f);
-
-  Loop::Run();
+  run();
 }
 
 void DesktopStreamerApp::Stop()
 {
-  std::promise<bool> promise;
-
-  auto f = std::bind(&DesktopStreamerApp::stop, shared_from_this(), &promise);
-  boost::asio::post(strand_, f);
-
-  promise.get_future().get();
-
-  Loop::Stop();
-}
-
-void DesktopStreamerApp::OnSocketClosed()
-{
-
-}
-
-void DesktopStreamerApp::OnPacket()
-{
-
+  auto f = std::bind(&DesktopStreamerApp::stop, shared_from_this());
+  boost::asio::post(io_, f);
 }
 
 void DesktopStreamerApp::run()
 {
-  auto env = boost::this_process::environment();
-  auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";
-
   excuteScreenCapturer();
+
+  ds_ = std::make_shared<DesktopStreamer>();
+  ds_->Run();
+
+  io_.run();
 }
 
-void DesktopStreamerApp::stop(std::promise<bool>* promise)
+void DesktopStreamerApp::stop()
 {
   process_.close();
-  promise->set_value(true);
 }
 
 void DesktopStreamerApp::excuteScreenCapturer()
 {
-  if (service_mode_)
+  switch (mode_)
   {
-    executeUserSessionProcess();
-  }
-  else
-  {
-    executeUserSessionProcess2();
+  case EXECUTE_MODE::SERVICE_MODE:  executeUserSessionProcess();  break;
+  case EXECUTE_MODE::CONSOLE_MODE:  executeProcess();             break;
   }
 }
 
 void DesktopStreamerApp::executeUserSessionProcess()
 {
-  DSLOG_INFO("RdsWinTxServiceEventLoop::executeUserSessionProcess");
+  DSLOG_INFO("DesktopStreamerApp::executeUserSessionProcess");
 
   DWORD session_id = WTSGetActiveConsoleSessionId();
   if (session_id == MAXDWORD)
@@ -148,15 +124,15 @@ void DesktopStreamerApp::executeUserSessionProcess()
 
   CloseHandle(pi.hThread);
 
-  process_ = std::move(boost::asio::windows::object_handle(strand_, pi.hProcess));
+  process_ = std::move(boost::asio::windows::object_handle(io_, pi.hProcess));
 
   auto f = boost::bind(&DesktopStreamerApp::userSessionProcessKilled, shared_from_this(), ph::error);
   process_.async_wait(f);
 }
 
-void DesktopStreamerApp::executeUserSessionProcess2()
+void DesktopStreamerApp::executeProcess()
 {
-  DSLOG_INFO("RdsWinTxServiceEventLoop::executeUserSessionProcess2");
+  DSLOG_INFO("DesktopStreamerApp::executeProcess");
 
   HANDLE process = GetCurrentProcess();
 
@@ -195,7 +171,7 @@ void DesktopStreamerApp::executeUserSessionProcess2()
 
   CloseHandle(pi.hThread);
 
-  process_ = std::move(boost::asio::windows::object_handle(strand_, pi.hProcess));
+  process_ = std::move(boost::asio::windows::object_handle(io_, pi.hProcess));
 
   auto f = boost::bind(&DesktopStreamerApp::userSessionProcessKilled, shared_from_this(), ph::error);
   process_.async_wait(f);

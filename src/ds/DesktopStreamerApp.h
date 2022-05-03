@@ -2,43 +2,36 @@
 #define _DS_DESKTOP_STREAMER_APP_H_
 
 #include "ds/Common.h"
+#include "ds/DesktopStreamer.h"
 
 namespace ds {
 
 class DesktopStreamerApp : public std::enable_shared_from_this<DesktopStreamerApp>
 {
 public:
-  DesktopStreamerApp();
+  DesktopStreamerApp(EXECUTE_MODE mode);
   virtual ~DesktopStreamerApp();
-  void Run(bool service_mode = true);
+  void Run();
   void Stop();
 
 private:
-  // SocketEvent
-  virtual void OnSocketClosed();
-  virtual void OnPacket();
-
-private:
   void run();
-  void stop(std::promise<bool>* promise);
+  void stop();
 
 private:
-  void doAcept();
-  void onAccept(std::shared_ptr<Socket> socket, const boost::system::error_code& ec);
   void excuteScreenCapturer();
   void executeUserSessionProcess();
-  void executeUserSessionProcess2();
+  void executeProcess();
   void userSessionProcessKilled(const boost::system::error_code& ec);
 
 private:
-  //std::thread thread_;
-  //boost::asio::io_context io_;
-  //boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
-  bool service_mode_;
+  boost::asio::io_context io_;
+  boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
+  boost::asio::windows::object_handle process_;
+  EXECUTE_MODE mode_;
 
 private:
-  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
-  boost::asio::windows::object_handle process_;
+  std::shared_ptr<DesktopStreamer> ds_;
 
 
 };

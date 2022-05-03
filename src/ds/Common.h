@@ -18,4 +18,10 @@
 // C/C++ Header
 #include <future>
 
+enum class EXECUTE_MODE
+{
+  SERVICE_MODE,
+  CONSOLE_MODE,
+};
+
 #endif

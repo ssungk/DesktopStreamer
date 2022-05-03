@@ -2,7 +2,7 @@
 #define _DS_WIN_SERVICE_H_
 
 #include "ds/Common.h"
-#include "ds/DesktopStreamer.h"
+#include "ds/DesktopStreamerApp.h"
 
 namespace ds {
 
@@ -24,7 +24,7 @@ private:
 private:
   static wchar_t service_name_[30];
   static SERVICE_STATUS_HANDLE ssh_;
-  static std::shared_ptr<DesktopStreamer> ds_;
+  static std::shared_ptr<DesktopStreamerApp> app_;
 
 };
 

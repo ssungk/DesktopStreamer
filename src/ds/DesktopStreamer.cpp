@@ -7,11 +7,11 @@ namespace ds {
 
 DesktopStreamer::DesktopStreamer() :
   strand_(boost::asio::make_strand(Loop::Io())),
-  acceptor_(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false),
+  acceptor_(strand_, boost::asio::local::stream_protocol::endpoint("..\\server.sock"), false),
   //strand_(Loop::Io().get_executor()),
   process_(strand_)
 {
-  std::remove("server.sock");
+  //std::remove("server.sock");
   //acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
 }
 
@@ -54,9 +54,6 @@ void DesktopStreamer::OnPacket()
 
 void DesktopStreamer::run()
 {
-  auto env = boost::this_process::environment();
-  auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";
-
   doAccept();
 
   excuteScreenCapturer();

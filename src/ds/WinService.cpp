@@ -7,11 +7,11 @@ namespace ds {
 
 wchar_t WinService::service_name_[30] = SERVICE_NAME;
 SERVICE_STATUS_HANDLE WinService::ssh_ = { 0 };
-std::shared_ptr<ds::DesktopStreamer> WinService::ds_;
+std::shared_ptr<ds::DesktopStreamerApp> WinService::app_;
 
 int WinService::ServiceRun()
 {
-  std::remove("server.sock");
+  std::remove("..\\server.sock");
 
   auto env = boost::this_process::environment();
   auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";
@@ -34,8 +34,8 @@ int WinService::ServiceRun()
         DSLOG_WARN("SetConsoleCtrlHandler failed");
       }
 
-      ds_ = std::make_shared<DesktopStreamer>();
-      ds_->Run(false);
+      app_ = std::make_shared<DesktopStreamerApp>(EXECUTE_MODE::CONSOLE_MODE);
+      app_->Run();
 
       return 0;
     }
@@ -60,8 +60,8 @@ void WinService::ServiceMain(DWORD argc, LPWSTR* argv)
   SetServiceState(SERVICE_START_PENDING);
   SetServiceState(SERVICE_RUNNING);
 
-  ds_ = std::make_shared<DesktopStreamer>();
-  ds_->Run();
+  app_ = std::make_shared<DesktopStreamerApp>(EXECUTE_MODE::SERVICE_MODE);
+  app_->Run();
 }
 
 DWORD WinService::ServiceHandler(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext)
@@ -72,8 +72,8 @@ DWORD WinService::ServiceHandler(DWORD dwControl, DWORD dwEventType, LPVOID lpEv
     SetServiceState(SERVICE_STOP_PENDING);
     // 서비스를 멈춘다 (즉, 종료와 같은 의미)
     DSLOG_INFO("SERVICE_CONTROL_STOP");
-    ds_->Stop();
-    ds_.reset();
+    app_->Stop();
+    app_.reset();
     SetServiceState(SERVICE_STOPPED);
     break;
   case SERVICE_CONTROL_SESSIONCHANGE:
@@ -124,7 +124,7 @@ BOOL WinService::ConsoleCtrlHandler(DWORD dwCtrlType)
 {
   switch (dwCtrlType)
   {
-  case CTRL_CLOSE_EVENT:    ds_->Stop();  return TRUE;  // Closing the console window
+  case CTRL_CLOSE_EVENT:    app_->Stop();  return TRUE; // Closing the console window
   case CTRL_C_EVENT:                                    // Ctrl+C
   case CTRL_BREAK_EVENT:                                // Ctrl+Break
   case CTRL_LOGOFF_EVENT:                               // User logs off. Passed only to services!
