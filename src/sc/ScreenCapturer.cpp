@@ -18,6 +18,7 @@ ScreenCapturer::~ScreenCapturer()
 
 void ScreenCapturer::Run()
 {
+  Loop::Run();
   run();
 }
 
@@ -46,14 +47,18 @@ void ScreenCapturer::run()
   auto socket = std::make_shared<Socket>(shared_from_this());
   //auto f = boost::bind(&ScreenCapturer::connectHandler, shared_from_this(), ph::error);
   //boost::asio::async_connect(strand_, socket.Sock(),)
-
-  boost::asio::local::stream_protocol::endpoint ep("server.sock");
+  DSLOG_CRITICAL("11111111111111111111111111");
+  boost::asio::local::stream_protocol::endpoint ep("D:\\server.sock");
+  DSLOG_CRITICAL("2222222222222222222222");
   boost::system::error_code ec;
   socket->Sock().connect(ep, ec);
+  DSLOG_CRITICAL("33333333333333333333333333");
   if (ec)
   {
     DSLOG_CRITICAL("uds 연결 실패");
   }
+
+  DSLOG_INFO("uds 연결");
 
 }
 

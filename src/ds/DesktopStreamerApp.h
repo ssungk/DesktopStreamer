@@ -29,10 +29,7 @@ private:
   boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
   boost::asio::windows::object_handle process_;
   EXECUTE_MODE mode_;
-
-private:
   std::shared_ptr<DesktopStreamer> ds_;
-
 
 };
 

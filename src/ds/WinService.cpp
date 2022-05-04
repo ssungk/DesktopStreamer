@@ -11,7 +11,7 @@ std::shared_ptr<ds::DesktopStreamerApp> WinService::app_;
 
 int WinService::ServiceRun()
 {
-  std::remove("..\\server.sock");
+  std::remove("D:\\server.sock");
 
   auto env = boost::this_process::environment();
   auto log_path = env["ProgramData"].to_string() + "\\DesktopStreamer\\DesktopStreamerService.log";

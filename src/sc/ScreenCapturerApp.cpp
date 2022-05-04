@@ -18,8 +18,8 @@ ScreenCapturerApp::~ScreenCapturerApp()
 
 int ScreenCapturerApp::Run()
 {
-  Loop::Run();
   run();
+
   return 0;
 }
 
@@ -36,6 +36,9 @@ void ScreenCapturerApp::run()
   Logger::Init("logger", path, 1024 * 1024 * 5, 5);
 
   DSLOG_INFO("============== Screen Capturer ==============");
+
+  sc_ = std::make_shared<ScreenCapturer>();
+  sc_->Run();
 
   io_.run();
 }

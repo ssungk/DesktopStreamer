@@ -2,6 +2,7 @@
 #define _DS_SC_SCREEN_CAPTURER_APP_H_
 
 #include "sc/Common.h"
+#include "sc/ScreenCapturer.h"
 
 namespace ds {
 
@@ -22,6 +23,7 @@ private:
   boost::asio::executor_work_guard<boost::asio::io_context::executor_type> work_;
 
 private:
+  std::shared_ptr<ScreenCapturer> sc_;
 
 };
 
