@@ -21,8 +21,6 @@ void Loop::Run()
   {
     threads_.create_thread(&Loop::run);
   }
-
-  run();
 }
 
 void Loop::Stop()
