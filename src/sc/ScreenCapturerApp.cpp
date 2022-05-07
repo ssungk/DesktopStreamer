@@ -8,12 +8,22 @@ namespace ds {
 ScreenCapturerApp::ScreenCapturerApp() :
   work_(boost::asio::make_work_guard(io_))
 {
-
+#ifdef _DEBUG
+  if (AllocConsole())
+  {
+    FILE* std_in, * std_out;
+    freopen_s(&std_in, "CONIN$", "r", stdin);
+    freopen_s(&std_out, "CONOUT$", "w", stdout);
+    freopen_s(&std_out, "CONOUT$", "w", stderr);
+  }
+#endif
 }
 
 ScreenCapturerApp::~ScreenCapturerApp()
 {
-
+#ifdef _DEBUG
+  FreeConsole();
+#endif
 }
 
 int ScreenCapturerApp::Run()

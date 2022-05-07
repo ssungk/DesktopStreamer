@@ -55,7 +55,8 @@ void ScreenCapturer::run()
   DSLOG_CRITICAL("33333333333333333333333333");
   if (ec)
   {
-    DSLOG_CRITICAL("uds 연결 실패");
+    DSLOG_CRITICAL("Unix Domain Socket connect failed");
+    return;
   }
 
   DSLOG_INFO("uds 연결");

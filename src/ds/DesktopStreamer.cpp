@@ -70,6 +70,8 @@ void DesktopStreamer::onAccept(std::shared_ptr<Socket> socket, const boost::syst
     return;
   }
 
+  DSLOG_ERROR("onAccept");
+
   socket_ = socket;
   socket_->Run();
 
