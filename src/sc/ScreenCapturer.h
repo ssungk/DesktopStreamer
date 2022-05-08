@@ -31,6 +31,7 @@ private:
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+  std::shared_ptr<Socket> socket_;
 
 };
 
