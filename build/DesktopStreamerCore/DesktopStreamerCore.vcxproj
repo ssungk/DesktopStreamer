@@ -90,10 +90,10 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Core\Buffer.cpp" />
     <ClCompile Include="..\..\src\Core\Logger.cpp" />
     <ClCompile Include="..\..\src\Core\Loop.cpp" />
     <ClCompile Include="..\..\src\Core\Socket.cpp" />
+    <ClCompile Include="..\..\src\Core\UdsPacket.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Core\Buffer.h" />
@@ -102,6 +102,7 @@
     <ClInclude Include="..\..\src\Core\Loop.h" />
     <ClInclude Include="..\..\src\Core\Socket.h" />
     <ClInclude Include="..\..\src\Core\SocketEvent.h" />
+    <ClInclude Include="..\..\src\Core\UdsPacket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

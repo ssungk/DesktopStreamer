@@ -24,7 +24,7 @@
     <ClCompile Include="..\..\src\Core\Loop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Core\Buffer.cpp">
+    <ClCompile Include="..\..\src\Core\UdsPacket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Core\Buffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Core\UdsPacket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

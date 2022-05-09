@@ -57,22 +57,13 @@ void ScreenCapturer::run()
   }
 
   DSLOG_INFO("uds 연결");
-  socket_->SendPacket();
+  //socket_->SendPacket();
 
 }
 
 void ScreenCapturer::stop()
 {
 
-}
-
-void ScreenCapturer::connectHandler(const boost::system::error_code& ec)
-{
-  if (ec)
-  {
-
-    return;
-  }
 }
 
 }  // namespace ds

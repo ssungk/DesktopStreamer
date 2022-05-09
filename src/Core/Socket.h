@@ -12,12 +12,13 @@ public:
   virtual ~Socket();
   void Run();
   void Stop();
-  void SendPacket();
+  void SendPacket(std::shared_ptr<Buffer> pkt);
   boost::asio::local::stream_protocol::socket& Sock();
 
 private:
   void run();
   void stop();
+  void sendPacket(std::shared_ptr<Buffer> pkt);
   void doRead();
   void onReadHeader(const boost::system::error_code& ec, size_t bytes_transferred);
   void onReadBody(const boost::system::error_code& ec, size_t bytes_transferred);
@@ -30,11 +31,8 @@ private:
 
   std::vector<uint8_t> buffer_;
 
+  std::queue<std::shared_ptr<Buffer>> queue_;
 
-  //boost::asio::strand<boost::asio::executor> strand_;
-  //boost::asio::io_context::strand strand_;
-  //boost::asio::strand<boost::asio::any_io_executor> strand_;
-  //
 
 
 };

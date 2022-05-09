@@ -29,9 +29,10 @@ void Socket::Stop()
   boost::asio::post(strand_, f);
 }
 
-void Socket::SendPacket()
+void Socket::SendPacket(std::shared_ptr<Buffer> pkt)
 {
-
+  auto f = boost::bind(&Socket::sendPacket, shared_from_this(), pkt);
+  boost::asio::post(strand_, f);
 }
 
 boost::asio::local::stream_protocol::socket& Socket::Sock()
@@ -47,6 +48,11 @@ void Socket::run()
 void Socket::stop()
 {
   socket_.close();
+}
+
+void Socket::sendPacket(std::shared_ptr<Buffer> pkt)
+{
+
 }
 
 void Socket::doRead()

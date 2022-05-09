@@ -27,7 +27,6 @@ private:
 private:
   void run();
   void stop();
-  void connectHandler(const boost::system::error_code& ec);
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;

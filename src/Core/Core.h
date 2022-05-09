@@ -1,8 +1,12 @@
 ﻿#ifndef _DS_CORE_CORE_H_
 #define _DS_CORE_CORE_H_
 
+// C/C++ Header
+#include <queue>
+
 // Desktop Streamer Core Logger Header
 #include <Core/Logger.h>
+#include <Core/Buffer.h>
 #include <Core/SocketEvent.h>
 
 // Boost Header
