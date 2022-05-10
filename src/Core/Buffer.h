@@ -1,7 +1,7 @@
 #ifndef _DS_CORE_BUFFER_H_
 #define _DS_CORE_BUFFER_H_
 
-#include <stdint.h>
+#include <Core/Protocol.h>
 
 namespace ds {
 
