@@ -19,7 +19,8 @@ ScreenCapturer::~ScreenCapturer()
 void ScreenCapturer::Run()
 {
   Loop::Run();
-  run();
+  auto f = boost::bind(&ScreenCapturer::run, shared_from_this());
+  boost::asio::post(strand_, f);
 }
 
 void ScreenCapturer::Stop()
@@ -57,7 +58,10 @@ void ScreenCapturer::run()
   }
 
   DSLOG_INFO("uds 연결");
-  //socket_->SendPacket();
+
+  std::vector<uint8_t> buf = { 0 };
+  auto pkt = std::make_shared<UdsPacket>(TYPE_SCREEN_NUM, buf);
+  socket_->SendPacket(pkt);
 
 }
 

@@ -19,5 +19,6 @@
 // Desktop Streamer Core Header
 #include <Core/Loop.h>
 #include <Core/Socket.h>
+#include <Core/UdsPacket.h>
 
 #endif

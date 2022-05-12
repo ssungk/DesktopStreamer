@@ -22,6 +22,8 @@ private:
   void doRead();
   void onReadHeader(const boost::system::error_code& ec, size_t bytes_transferred);
   void onReadBody(const boost::system::error_code& ec, size_t bytes_transferred);
+  void doWrite(std::shared_ptr<Buffer> pkt);
+  void onWrite(std::shared_ptr<Buffer> pkt, const boost::system::error_code& ec, size_t bytes_transferred);
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
@@ -32,8 +34,7 @@ private:
   std::vector<uint8_t> buffer_;
 
   std::queue<std::shared_ptr<Buffer>> queue_;
-
-
+  bool writing_;
 
 };
 
