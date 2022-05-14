@@ -7,8 +7,51 @@ namespace ds {
 
 DesktopStreamer::DesktopStreamer() :
   strand_(boost::asio::make_strand(Loop::Io())),
-  acceptor_(strand_, boost::asio::local::stream_protocol::endpoint("D:\\server.sock"), false)
+  acceptor_(strand_)
 {
+  // Unix domain socekt 경로 얻어옴
+  auto env = boost::this_process::environment();
+  auto path = env["ProgramData"].to_string() + "\\DesktopStreamer\\server.sock";
+  boost::asio::local::stream_protocol::endpoint ep(path);
+
+  boost::filesystem::remove(path);
+
+  boost::system::error_code ec;
+  acceptor_.open(ep.protocol(), ec);
+  if (ec)
+  {
+    DSLOG_ERROR("accptor open error. ec : {}", ec.message());
+    std::terminate();
+  }
+
+  boost::asio::ip::tcp::acceptor::reuse_address option(false);
+  acceptor_.set_option(option, ec);
+  if (ec)
+  {
+    DSLOG_ERROR("accptor set_option error. ec : {}", ec.message());
+    std::terminate();
+  }
+
+  acceptor_.bind(ep, ec);
+  if (ec)
+  {
+    DSLOG_ERROR("accptor bind error. ec : {}", ec.message());
+    std::terminate();
+  }
+
+  acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
+  if (ec)
+  {
+    DSLOG_ERROR("acceptor listen failed. ec : {}", ec.message());
+    std::terminate();
+  }
+
+
+
+
+  //, boost::asio::local::stream_protocol::endpoint("D:\\server.sock"), false)
+
+
   //std::remove("server.sock");
   //acceptor_ = std::make_shared<boost::asio::local::stream_protocol::acceptor>(strand_, boost::asio::local::stream_protocol::endpoint("server.sock"), false);
 }

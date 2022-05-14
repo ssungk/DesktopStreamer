@@ -45,12 +45,14 @@ void ScreenCapturer::OnPacket(uint8_t num, std::vector<uint8_t> pkt)
 
 void ScreenCapturer::run()
 {
-  socket_ = std::make_shared<Socket>(shared_from_this());
-  boost::asio::local::stream_protocol::endpoint ep("D:\\server.sock");
+  // Unix domain socekt 경로 얻어옴
+  auto env = boost::this_process::environment();
+  auto path = env["ProgramData"].to_string() + "\\DesktopStreamer\\server.sock";
+  boost::asio::local::stream_protocol::endpoint ep(path);
 
   boost::system::error_code ec;
+  socket_ = std::make_shared<Socket>(shared_from_this());
   socket_->Sock().connect(ep, ec);
-
   if (ec)
   {
     DSLOG_CRITICAL("Unix Domain Socket connect failed");
