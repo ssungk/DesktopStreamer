@@ -82,7 +82,7 @@ void Socket::sendPacket(std::shared_ptr<Buffer> pkt)
 void Socket::doRead()
 {
   auto f = bind(&Socket::onReadHeader, shared_from_this(), ph::error, ph::bytes_transferred);
-  boost::asio::async_read(socket_, boost::asio::dynamic_buffer(buffer_, sizeof(uint8_t)), f);
+  boost::asio::async_read(socket_, boost::asio::buffer(&header_, sizeof(header_)), f);
 }
 
 void Socket::onReadHeader(const boost::system::error_code& ec, size_t bytes_transferred)
@@ -95,13 +95,25 @@ void Socket::onReadHeader(const boost::system::error_code& ec, size_t bytes_tran
   }
 
   DSLOG_DEBUG("onReadHeader");
-
-  doRead();
+  buffer_.clear();
+  auto f = bind(&Socket::onReadBody, shared_from_this(), ph::error, ph::bytes_transferred);
+  boost::asio::async_read(socket_, boost::asio::dynamic_buffer(buffer_, header_.size), f);
 }
 
 void Socket::onReadBody(const boost::system::error_code& ec, size_t bytes_transferred)
 {
+  if (ec)
+  {
+    DSLOG_DEBUG("onReadBody error. ec : {}", ec.message());
+    stop();
+    return;
+  }
 
+  DSLOG_DEBUG("onReadBody");
+
+
+
+  doRead();
 }
 
 void Socket::doWrite(std::shared_ptr<Buffer> pkt)

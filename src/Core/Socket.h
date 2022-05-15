@@ -30,7 +30,7 @@ private:
   boost::asio::local::stream_protocol::socket socket_;
   std::shared_ptr<SocketEvent> event_;
 
-
+  UdsHeader header_;
   std::vector<uint8_t> buffer_;
 
   std::queue<std::shared_ptr<Buffer>> queue_;
