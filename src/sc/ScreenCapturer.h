@@ -19,7 +19,7 @@ public:
 private:
   // SocketEvent
   virtual void OnSocketClosed();
-  virtual void OnPacket();
+  virtual void OnPacket(std::shared_ptr<UdsPacket> pkt);
 
   // DesktopDuplicationEvent
   virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt);

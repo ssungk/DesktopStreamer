@@ -33,7 +33,7 @@ void ScreenCapturer::OnSocketClosed()
 
 }
 
-void ScreenCapturer::OnPacket()
+void ScreenCapturer::OnPacket(std::shared_ptr<UdsPacket> pkt)
 {
 
 }

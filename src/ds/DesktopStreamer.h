@@ -17,7 +17,7 @@ public:
 private:
   // SocketEvent
   virtual void OnSocketClosed();
-  virtual void OnPacket();
+  virtual void OnPacket(std::shared_ptr<UdsPacket> pkt);
 
 private:
   void run();

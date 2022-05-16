@@ -82,7 +82,7 @@ void DesktopStreamer::OnSocketClosed()
 
 }
 
-void DesktopStreamer::OnPacket()
+void DesktopStreamer::OnPacket(std::shared_ptr<UdsPacket> pkt)
 {
 
 }
