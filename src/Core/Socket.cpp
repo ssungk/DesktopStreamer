@@ -26,7 +26,7 @@ void Socket::Run()
 
 void Socket::Stop()
 {
-  auto f = boost::bind(&Socket::stop, shared_from_this());
+  auto f = boost::bind(&Socket::stop, shared_from_this(), false);
   boost::asio::post(strand_, f);
 }
 
@@ -46,12 +46,15 @@ void Socket::run()
   doRead();
 }
 
-void Socket::stop()
+void Socket::stop(bool internal)
 {
   if (!event_)
   {
     return;
   }
+
+  internal ? event_->OnSocketClosed() : void();
+  event_.reset();
 
   socket_.close();
   writing_ = false;

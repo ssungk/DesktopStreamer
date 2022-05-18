@@ -27,6 +27,8 @@ private:
 private:
   void run();
   void stop();
+  void onSocketClosed();
+  void onPacket(std::shared_ptr<UdsPacket> pkt);
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;

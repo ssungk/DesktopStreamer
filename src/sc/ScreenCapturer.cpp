@@ -30,7 +30,8 @@ void ScreenCapturer::Stop()
 
 void ScreenCapturer::OnSocketClosed()
 {
-
+  auto f = boost::bind(&ScreenCapturer::onSocketClosed, shared_from_this());
+  boost::asio::post(strand_, f);
 }
 
 void ScreenCapturer::OnPacket(std::shared_ptr<UdsPacket> pkt)
@@ -65,9 +66,28 @@ void ScreenCapturer::run()
   auto pkt = std::make_shared<UdsPacket>(TYPE_SCREEN_NUM, buf);
   socket_->SendPacket(pkt);
 
+  //Sleep(1000);
+  //socket_->SendPacket(pkt);
+  //Sleep(1000);
+  //socket_->SendPacket(pkt);
+  //Sleep(1000);
+  //socket_->SendPacket(pkt);
+  //Sleep(1000);
+  //socket_->SendPacket(pkt);
 }
 
 void ScreenCapturer::stop()
+{
+
+}
+
+void ScreenCapturer::onSocketClosed()
+{
+  DSLOG_CRITICAL("onSocketClosed");
+  abort();
+}
+
+void ScreenCapturer::onPacket(std::shared_ptr<UdsPacket> pkt)
 {
 
 }

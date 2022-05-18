@@ -17,7 +17,7 @@ public:
 
 private:
   void run();
-  void stop();
+  void stop(bool internal = true);
   void sendPacket(std::shared_ptr<Buffer> pkt);
   void doRead();
   void onReadHeader(const boost::system::error_code& ec, size_t bytes_transferred);

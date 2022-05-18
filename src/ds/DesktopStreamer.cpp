@@ -95,6 +95,7 @@ void DesktopStreamer::run()
 void DesktopStreamer::stop()
 {
   acceptor_.close();
+  socket_->Stop();
 }
 
 void DesktopStreamer::doAccept()
