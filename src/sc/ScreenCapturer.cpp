@@ -5,8 +5,9 @@ namespace fs = boost::filesystem;
 
 namespace ds {
 
-ScreenCapturer::ScreenCapturer() :
-  strand_(boost::asio::make_strand(Loop::Io()))
+ScreenCapturer::ScreenCapturer(std::shared_ptr<ScreenCapturerEvent> event) :
+  strand_(boost::asio::make_strand(Loop::Io())),
+  event_(event)
 {
 
 }

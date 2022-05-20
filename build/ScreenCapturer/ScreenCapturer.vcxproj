@@ -160,6 +160,7 @@
     <ClInclude Include="..\..\src\sc\DesktopDuplicationEvent.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturerApp.h" />
+    <ClInclude Include="..\..\src\sc\ScreenCapturerEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

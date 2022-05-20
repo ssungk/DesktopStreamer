@@ -39,6 +39,12 @@ void ScreenCapturerApp::Stop()
   boost::asio::post(io_, f);
 }
 
+void ScreenCapturerApp::OnScreenCaptureClosed()
+{
+  auto f = std::bind(&ScreenCapturerApp::onScreenCaptureClosed, shared_from_this());
+  boost::asio::post(io_, f);
+}
+
 void ScreenCapturerApp::run()
 {
   auto env = boost::this_process::environment();
@@ -47,7 +53,7 @@ void ScreenCapturerApp::run()
 
   DSLOG_INFO("============== Screen Capturer ==============");
 
-  sc_ = std::make_shared<ScreenCapturer>();
+  sc_ = std::make_shared<ScreenCapturer>(shared_from_this());
   sc_->Run();
 
   io_.run();
@@ -56,6 +62,11 @@ void ScreenCapturerApp::run()
 void ScreenCapturerApp::stop()
 {
   work_.reset();
+}
+
+void ScreenCapturerApp::onScreenCaptureClosed()
+{
+  stop();
 }
 
 }  // namespace ds

@@ -2,11 +2,13 @@
 #define _DS_SC_SCREEN_CAPTURER_APP_H_
 
 #include "sc/Common.h"
+#include "sc/ScreenCapturerEvent.h"
 #include "sc/ScreenCapturer.h"
 
 namespace ds {
 
-class ScreenCapturerApp : public std::enable_shared_from_this<ScreenCapturerApp>
+class ScreenCapturerApp : public std::enable_shared_from_this<ScreenCapturerApp>,
+                          public ScreenCapturerEvent
 {
 public:
   ScreenCapturerApp();
@@ -14,9 +16,18 @@ public:
   int Run();
   void Stop();
 
+public:
+  // ScreenCapturerEvent
+  virtual void OnScreenCaptureClosed() override;
+
+
 private:
   void run();
   void stop();
+
+private:
+  // ScreenCapturerEvent
+  void onScreenCaptureClosed();
 
 private: 
   boost::asio::io_context io_;

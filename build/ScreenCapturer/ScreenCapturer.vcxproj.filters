@@ -44,5 +44,8 @@
     <ClInclude Include="..\..\src\sc\DesktopDuplicationEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\sc\ScreenCapturerEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

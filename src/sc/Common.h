@@ -23,7 +23,7 @@
 
 
 #include "sc/DesktopDuplicationEvent.h"
-
+#include "sc/ScreenCapturerEvent.h"
 
 
 

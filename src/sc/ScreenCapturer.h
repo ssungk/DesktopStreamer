@@ -11,7 +11,7 @@ class ScreenCapturer : public std::enable_shared_from_this<ScreenCapturer>,
                        public DesktopDuplicationEvent
 {
 public:
-  ScreenCapturer();
+  ScreenCapturer(std::shared_ptr<ScreenCapturerEvent> event);
   virtual ~ScreenCapturer();
   void Run();
   void Stop();
@@ -32,6 +32,7 @@ private:
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+  std::shared_ptr<ScreenCapturerEvent> event_;
   std::shared_ptr<Socket> socket_;
 
 };
