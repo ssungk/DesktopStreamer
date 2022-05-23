@@ -1,5 +1,5 @@
-﻿#ifndef _DS_CORE_PROTOCOLH_
-#define _DS_CORE_PROTOCOLH_
+﻿#ifndef _DS_CORE_PROTOCOL_H_
+#define _DS_CORE_PROTOCOL_H_
 
 #include <stdint.h>
 
@@ -11,6 +11,7 @@ namespace ds {
 enum TYPE : uint32_t
 {
   TYPE_SCREEN_NUM = 0,
+  TYPE_KEEP_ALIVE,
   TYPE_NUM,
 };
 
