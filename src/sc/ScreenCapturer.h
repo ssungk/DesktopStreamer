@@ -28,12 +28,18 @@ private:
   void run();
   void stop();
   void onSocketClosed();
+  void doTimer();
+  void onTimer(const boost::system::error_code& ec);
+
+  // SocketEvent
   void onPacket(std::shared_ptr<UdsPacket> pkt);
 
 private:
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+  boost::asio::steady_timer timer_;
   std::shared_ptr<ScreenCapturerEvent> event_;
   std::shared_ptr<Socket> socket_;
+
 
 };
 

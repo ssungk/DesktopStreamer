@@ -7,6 +7,7 @@ namespace ds {
 
 ScreenCapturer::ScreenCapturer(std::shared_ptr<ScreenCapturerEvent> event) :
   strand_(boost::asio::make_strand(Loop::Io())),
+  timer_(strand_, std::chrono::steady_clock::now()),
   event_(event)
 {
 
@@ -67,14 +68,7 @@ void ScreenCapturer::run()
   auto pkt = std::make_shared<UdsPacket>(TYPE_SCREEN_NUM, buf);
   socket_->SendPacket(pkt);
 
-  //Sleep(1000);
-  //socket_->SendPacket(pkt);
-  //Sleep(1000);
-  //socket_->SendPacket(pkt);
-  //Sleep(1000);
-  //socket_->SendPacket(pkt);
-  //Sleep(1000);
-  //socket_->SendPacket(pkt);
+  doTimer();
 }
 
 void ScreenCapturer::stop()
@@ -86,6 +80,28 @@ void ScreenCapturer::onSocketClosed()
 {
   DSLOG_CRITICAL("onSocketClosed");
   abort();
+}
+
+void ScreenCapturer::doTimer()
+{
+  auto f = boost::bind(&ScreenCapturer::onTimer, shared_from_this(), ph::error);
+  timer_.expires_at(timer_.expiry() + std::chrono::seconds(1));
+  timer_.async_wait(f);
+}
+
+void ScreenCapturer::onTimer(const boost::system::error_code& ec)
+{
+  if (ec)
+  {
+    DSLOG_ERROR("VideoTranscoder::onTimer error. ec : {}", ec.message());
+    return;
+  }
+
+  doTimer();
+
+  std::vector<uint8_t> buf = { 0 };
+  auto pkt = std::make_shared<UdsPacket>(TYPE_KEEP_ALIVE, buf);
+  socket_->SendPacket(pkt);
 }
 
 void ScreenCapturer::onPacket(std::shared_ptr<UdsPacket> pkt)

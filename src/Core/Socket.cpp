@@ -140,7 +140,7 @@ void Socket::onWrite(std::shared_ptr<Buffer> pkt, const boost::system::error_cod
     return;
   }
 
-  DSLOG_ERROR("onWrite");
+  DSLOG_INFO("onWrite");
 
   if (queue_.size())
   {
