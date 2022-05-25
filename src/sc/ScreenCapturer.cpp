@@ -93,7 +93,13 @@ void ScreenCapturer::onTimer(const boost::system::error_code& ec)
 {
   if (ec)
   {
-    DSLOG_ERROR("VideoTranscoder::onTimer error. ec : {}", ec.message());
+    DSLOG_ERROR("ScreenCapturer::onTimer error. ec : {}", ec.message());
+    return;
+  }
+
+  if (!event_)
+  {
+    DSLOG_ERROR("ScreenCapturer stopped");
     return;
   }
 
