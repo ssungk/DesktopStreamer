@@ -22,7 +22,8 @@ private:
   virtual void OnPacket(std::shared_ptr<UdsPacket> pkt);
 
   // DesktopDuplicationEvent
-  virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt);
+  virtual void OnScreenNum(uint8_t num) override;
+  virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt) override;
 
 private:
   void run();

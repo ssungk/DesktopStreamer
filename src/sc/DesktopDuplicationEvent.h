@@ -9,6 +9,7 @@ class DesktopDuplicationEvent
 {
 public:
   virtual ~DesktopDuplicationEvent() {}
+  virtual void OnScreenNum(uint8_t num) = 0;
   virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt) = 0;
 
 };
