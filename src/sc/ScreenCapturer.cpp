@@ -46,7 +46,7 @@ void ScreenCapturer::OnScreenNum(uint8_t num)
 
 }
 
-void ScreenCapturer::OnPacket(uint8_t num, std::vector<uint8_t> pkt)
+void ScreenCapturer::OnScreenPacket(uint8_t num, std::vector<uint8_t> pkt)
 {
 
 }

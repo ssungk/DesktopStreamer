@@ -23,7 +23,7 @@ private:
 
   // DesktopDuplicationEvent
   virtual void OnScreenNum(uint8_t num) override;
-  virtual void OnPacket(uint8_t num, std::vector<uint8_t> pkt) override;
+  virtual void OnScreenPacket(uint8_t num, std::vector<uint8_t> pkt) override;
 
 private:
   void run();
