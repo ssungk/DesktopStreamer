@@ -27,7 +27,7 @@ private:
 
 private:
   void run();
-  void stop();
+  void stop(bool internal = true);
   void onSocketClosed();
   void doTimer();
   void onTimer(const boost::system::error_code& ec);

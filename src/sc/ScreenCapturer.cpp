@@ -27,7 +27,9 @@ void ScreenCapturer::Run()
 
 void ScreenCapturer::Stop()
 {
-
+  auto f = boost::bind(&ScreenCapturer::stop, shared_from_this(), false);
+  boost::asio::post(strand_, f);
+  Loop::Stop();
 }
 
 void ScreenCapturer::OnSocketClosed()
@@ -76,15 +78,24 @@ void ScreenCapturer::run()
   doTimer();
 }
 
-void ScreenCapturer::stop()
+void ScreenCapturer::stop(bool internal)
 {
+  if (!event_)
+  {
+    return;
+  }
 
+  internal ? event_->OnScreenCaptureClosed() : void();
+  event_.reset();
+
+  socket_->Stop();
+  timer_.cancel();
 }
 
 void ScreenCapturer::onSocketClosed()
 {
   DSLOG_CRITICAL("onSocketClosed");
-  abort();
+  stop();
 }
 
 void ScreenCapturer::doTimer()
