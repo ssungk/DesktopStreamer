@@ -76,6 +76,9 @@ void ScreenCapturer::run()
   socket_->SendPacket(pkt);
 
   doTimer();
+
+  dup_ = std::make_shared<DesktopDuplication>(shared_from_this());
+  dup_->Run();
 }
 
 void ScreenCapturer::stop(bool internal)

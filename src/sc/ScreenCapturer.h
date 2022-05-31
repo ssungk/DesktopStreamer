@@ -2,6 +2,7 @@
 #define _DS_SC_SCREEN_CAPTURER_H_
 
 #include "sc/Common.h"
+#include "sc/DesktopDuplication.h"
 #include "sc/DesktopDuplicationEvent.h"
 
 namespace ds {
@@ -40,6 +41,7 @@ private:
   boost::asio::steady_timer timer_;
   std::shared_ptr<ScreenCapturerEvent> event_;
   std::shared_ptr<Socket> socket_;
+  std::shared_ptr<DesktopDuplication> dup_;
 
 
 };
