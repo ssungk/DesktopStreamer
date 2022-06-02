@@ -120,7 +120,8 @@ void DesktopDuplication::init()
 
 void DesktopDuplication::run()
 {
-
+  auto f = boost::bind(&DesktopDuplication::capture, shared_from_this());
+  boost::asio::post(strand_, f);
 }
 
 void DesktopDuplication::stop()
@@ -142,25 +143,25 @@ void DesktopDuplication::capture()
     HRESULT hr = dup->ReleaseFrame();
     if (FAILED(hr))
     {
-      //DSLOG_ERROR("ReleaseFrame failed\n");
+      //DSLOG_ERROR("ReleaseFrame failed");
     }
 
     hr = dup->AcquireNextFrame(INFINITE, &frame_Info, &resource);
     if (FAILED(hr))
     {
-      DSLOG_ERROR("AcquireNextFrame failed\n");
+      DSLOG_ERROR("AcquireNextFrame failed");
       return;
     }
 
     if (frame_Info.LastMouseUpdateTime.QuadPart)
     {
       // 본 예제에서는 마우스에대해 특별히 처리하지 않음
-      DSLOG_ERROR("There is a change in the mouse cursor\n");
+      DSLOG_ERROR("There is a change in the mouse cursor");
     }
 
     if (!frame_Info.LastPresentTime.QuadPart)
     {
-      DSLOG_ERROR("The screen is not updated\n");
+      DSLOG_ERROR("The screen is not updated");
       continue;
     }
 
@@ -169,12 +170,12 @@ void DesktopDuplication::capture()
     resource->QueryInterface(IID_PPV_ARGS(&gpu_texture));
     if (FAILED(hr))
     {
-      DSLOG_ERROR("resource->QueryInterface failed\n");
+      DSLOG_ERROR("resource->QueryInterface failed");
       return;
     }
 
 
-    DSLOG_ERROR("[%003d] write screen%d \n", count);
+    DSLOG_ERROR("[{}] write screen", count);
     count++;
   }
 }

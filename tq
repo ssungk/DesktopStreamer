@@ -1,0 +1,23 @@
+[1mdiff --git a/src/sc/DesktopDuplication.cpp b/src/sc/DesktopDuplication.cpp[m
+[1mindex 2802337..9693a47 100644[m
+[1m--- a/src/sc/DesktopDuplication.cpp[m
+[1m+++ b/src/sc/DesktopDuplication.cpp[m
+[36m@@ -120,7 +120,8 @@[m [mvoid DesktopDuplication::init()[m
+ [m
+ void DesktopDuplication::run()[m
+ {[m
+[31m-[m
+[32m+[m[32m  auto f = boost::bind(&DesktopDuplication::capture, shared_from_this());[m[41m[m
+[32m+[m[32m  boost::asio::post(strand_, f);[m[41m[m
+ }[m
+ [m
+ void DesktopDuplication::stop()[m
+[36m@@ -174,7 +175,7 @@[m [mvoid DesktopDuplication::capture()[m
+     }[m
+ [m
+ [m
+[31m-    DSLOG_ERROR("[%003d] write screen%d \n", count);[m
+[32m+[m[32m    DSLOG_ERROR("[{}] write screen", count);[m[41m[m
+     count++;[m
+   }[m
+ }[m
