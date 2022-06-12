@@ -131,53 +131,53 @@ void DesktopDuplication::stop()
 
 void DesktopDuplication::capture()
 {
+  auto f = boost::bind(&DesktopDuplication::capture, shared_from_this());
+  boost::asio::post(strand_, f);
+
   auto& dup = dup_;
 
-  int count = 0;
   DXGI_OUTDUPL_FRAME_INFO frame_Info;
-  while (count < 300)
+
+  CComPtr<IDXGIResource> resource;
+
+  // Release if already captured frames exist
+  HRESULT hr = dup->ReleaseFrame();
+  if (FAILED(hr))
   {
-    CComPtr<IDXGIResource> resource;
-
-    // Release if already captured frames exist
-    HRESULT hr = dup->ReleaseFrame();
-    if (FAILED(hr))
-    {
-      //DSLOG_ERROR("ReleaseFrame failed");
-    }
-
-    hr = dup->AcquireNextFrame(INFINITE, &frame_Info, &resource);
-    if (FAILED(hr))
-    {
-      DSLOG_ERROR("AcquireNextFrame failed");
-      return;
-    }
-
-    if (frame_Info.LastMouseUpdateTime.QuadPart)
-    {
-      // 본 예제에서는 마우스에대해 특별히 처리하지 않음
-      DSLOG_ERROR("There is a change in the mouse cursor");
-    }
-
-    if (!frame_Info.LastPresentTime.QuadPart)
-    {
-      DSLOG_ERROR("The screen is not updated");
-      continue;
-    }
-
-    // desktop image updated
-    CComPtr<ID3D11Texture2D> gpu_texture;
-    resource->QueryInterface(IID_PPV_ARGS(&gpu_texture));
-    if (FAILED(hr))
-    {
-      DSLOG_ERROR("resource->QueryInterface failed");
-      return;
-    }
-
-
-    DSLOG_ERROR("[{}] write screen", count);
-    count++;
+    //DSLOG_ERROR("ReleaseFrame failed");
   }
+
+  hr = dup->AcquireNextFrame(INFINITE, &frame_Info, &resource);
+  if (FAILED(hr))
+  {
+    DSLOG_ERROR("AcquireNextFrame failed");
+    return;
+  }
+
+  if (frame_Info.LastMouseUpdateTime.QuadPart)
+  {
+    // 본 예제에서는 마우스에대해 특별히 처리하지 않음
+    DSLOG_ERROR("There is a change in the mouse cursor");
+  }
+
+  if (!frame_Info.LastPresentTime.QuadPart)
+  {
+    DSLOG_ERROR("The screen is not updated");
+    return;
+  }
+
+  // desktop image updated
+  CComPtr<ID3D11Texture2D> gpu_texture;
+  resource->QueryInterface(IID_PPV_ARGS(&gpu_texture));
+  if (FAILED(hr))
+  {
+    DSLOG_ERROR("resource->QueryInterface failed");
+    return;
+  }
+
+
+
+
 }
 
 } // namespace ds
