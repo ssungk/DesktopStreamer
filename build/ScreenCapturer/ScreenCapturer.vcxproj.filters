@@ -27,6 +27,12 @@
     <ClCompile Include="..\..\src\sc\DesktopDuplication.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\sc\WinMFVideoEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\sc\WinAsyncCallback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h">
@@ -45,6 +51,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sc\ScreenCapturerEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sc\WinMFVideoEncoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sc\WinAsyncCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -92,6 +92,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DesktopStreamerCore.lib;Mfplat.lib;mfuuid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -108,6 +109,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>DesktopStreamerCore.lib;Mfplat.lib;mfuuid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,7 +126,7 @@
       <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)..\third_party\boost\stage\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DesktopStreamerCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DesktopStreamerCore.lib;Mfplat.lib;mfuuid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,7 +147,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)..\third_party\boost\stage\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>DesktopStreamerCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>DesktopStreamerCore.lib;Mfplat.lib;mfuuid.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,6 +155,8 @@
     <ClCompile Include="..\..\src\sc\Main.cpp" />
     <ClCompile Include="..\..\src\sc\ScreenCapturer.cpp" />
     <ClCompile Include="..\..\src\sc\ScreenCapturerApp.cpp" />
+    <ClCompile Include="..\..\src\sc\WinMFVideoEncoder.cpp" />
+    <ClCompile Include="..\..\src\sc\WinAsyncCallback.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\sc\Common.h" />
@@ -161,6 +165,8 @@
     <ClInclude Include="..\..\src\sc\ScreenCapturer.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturerApp.h" />
     <ClInclude Include="..\..\src\sc\ScreenCapturerEvent.h" />
+    <ClInclude Include="..\..\src\sc\WinMFVideoEncoder.h" />
+    <ClInclude Include="..\..\src\sc\WinAsyncCallback.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
