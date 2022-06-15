@@ -25,9 +25,8 @@ WinMFVideoEncoder::~WinMFVideoEncoder()
 
 int WinMFVideoEncoder::Run()
 {
-  //codec_ = WinMFTool::ConvertMFCodecId(vso_->dst_codec);
-  //
-  //auto mfts = findEncoders(codec_);
+  findEncoder();
+
   //
   //for (auto& mft : mfts)
   //{
@@ -190,32 +189,28 @@ STDMETHODIMP WinMFVideoEncoder::Invoke(IMFAsyncResult* result)
   return hr;
 }
 
-std::vector<std::shared_ptr<IMFTransform>> WinMFVideoEncoder::findEncoders(GUID codec)
+void WinMFVideoEncoder::findEncoder()
 {
-  std::vector<std::shared_ptr<IMFTransform>> mfts;
-
-  MFT_REGISTER_TYPE_INFO otype = { MFMediaType_Video , codec };
-  UINT32 flags = MFT_ENUM_FLAG_SORTANDFILTER | MFT_ENUM_FLAG_SYNCMFT | MFT_ENUM_FLAG_ASYNCMFT | MFT_ENUM_FLAG_HARDWARE;
+  MFT_REGISTER_TYPE_INFO itype = { MFMediaType_Video , MFVideoFormat_NV12 };
+  MFT_REGISTER_TYPE_INFO otype = { MFMediaType_Video , MFVideoFormat_H264 };
+  UINT32 flags = MFT_ENUM_FLAG_SORTANDFILTER | MFT_ENUM_FLAG_HARDWARE;
 
   UINT32 count = 0;
   CComHeapPtr<IMFActivate*> activate;
-  HRESULT hr = MFTEnumEx(MFT_CATEGORY_VIDEO_ENCODER, flags, NULL, &otype, &activate, &count);
-  if (SUCCEEDED(hr) && count)
+  HRESULT hr = MFTEnumEx(MFT_CATEGORY_VIDEO_ENCODER, flags, &itype, &otype, &activate, &count);
+  if (FAILED(hr) || !count)
   {
-    for (UINT32 i = 0; i < count; i++)
-    {
-      IMFTransform* temp;
-      hr = activate[i]->ActivateObject(IID_PPV_ARGS(&temp));
-      if (SUCCEEDED(hr))
-      {
-        //std::shared_ptr<IMFTransform> mft(temp, WinMFTool::MftCustomDeleter);
-        //mfts.push_back(mft);
-      }
-      activate[i]->Release();
-    }
+    DSLOG_ERROR("MFTEnumEx failed");
+    return;
   }
 
-  return mfts;
+  hr = activate[0]->ActivateObject(IID_PPV_ARGS(&mft_));
+  CHECK_HR(hr, "ActivateObject failed");
+
+  for (UINT32 i = 0; i < count; i++)
+  {
+    activate[i]->Release();
+  }
 }
 
 int WinMFVideoEncoder::init(std::shared_ptr<IMFTransform> mft)
@@ -458,7 +453,7 @@ PROCESS:
   {
     if (hr == MF_E_TRANSFORM_STREAM_CHANGE)
     {
-      setOutputType(mft_);
+     ///////////// setOutputType(mft_);
       bool ret = promise_[1].get_future().get();
       std::promise<bool> promise;
       promise_[1] = std::move(promise);

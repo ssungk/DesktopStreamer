@@ -23,7 +23,7 @@ public:
   STDMETHODIMP Invoke(IMFAsyncResult* result) override;
 
 private:
-  std::vector<std::shared_ptr<IMFTransform>> findEncoders(GUID codec);
+  void findEncoder();
   int init(std::shared_ptr<IMFTransform> mft);
   int setCodecOption(std::shared_ptr<IMFTransform> mft);
   int setInputType(std::shared_ptr<IMFTransform> mft);
@@ -36,7 +36,8 @@ private:
   void output();
 
 private:
-  std::shared_ptr<IMFTransform> mft_;
+  CComPtr<IMFTransform> mft_;
+  //std::shared_ptr<IMFTransform> mft_;
   CComQIPtr<IMFMediaEventGenerator> eg_;
   GUID codec_;
   uint32_t timestamp_;
