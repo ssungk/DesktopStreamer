@@ -25,7 +25,11 @@ WinMFVideoEncoder::~WinMFVideoEncoder()
 
 int WinMFVideoEncoder::Run()
 {
-  findEncoder();
+  auto ret = findEncoder();
+  if (ret)
+  {
+    return ret;
+  }
 
   //
   //for (auto& mft : mfts)
@@ -189,7 +193,7 @@ STDMETHODIMP WinMFVideoEncoder::Invoke(IMFAsyncResult* result)
   return hr;
 }
 
-void WinMFVideoEncoder::findEncoder()
+int WinMFVideoEncoder::findEncoder()
 {
   MFT_REGISTER_TYPE_INFO itype = { MFMediaType_Video , MFVideoFormat_NV12 };
   MFT_REGISTER_TYPE_INFO otype = { MFMediaType_Video , MFVideoFormat_H264 };
@@ -201,7 +205,7 @@ void WinMFVideoEncoder::findEncoder()
   if (FAILED(hr) || !count)
   {
     DSLOG_ERROR("MFTEnumEx failed");
-    return;
+    return -1;
   }
 
   hr = activate[0]->ActivateObject(IID_PPV_ARGS(&mft_));
@@ -211,6 +215,8 @@ void WinMFVideoEncoder::findEncoder()
   {
     activate[i]->Release();
   }
+
+  return 0;
 }
 
 int WinMFVideoEncoder::init(std::shared_ptr<IMFTransform> mft)

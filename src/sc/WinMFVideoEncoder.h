@@ -23,7 +23,7 @@ public:
   STDMETHODIMP Invoke(IMFAsyncResult* result) override;
 
 private:
-  void findEncoder();
+  int findEncoder();
   int init(std::shared_ptr<IMFTransform> mft);
   int setCodecOption(std::shared_ptr<IMFTransform> mft);
   int setInputType(std::shared_ptr<IMFTransform> mft);
